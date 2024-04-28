@@ -1,0 +1,18 @@
+#javascrypt
+  const Web3 = require('web3');
+const { abi, evm } = require('./MyToken.json'); // Replace with the ABI and Bytecode of your contract
+
+const web3 = new Web3('http://localhost:8545'); // Replace with your Ethereum node URL
+const account = '0xYourAccountAddress'; // Replace with your Ethereum account address
+
+const contract = new web3.eth.Contract(abi);
+
+contract.deploy({
+    data: evm.bytecode.object,
+}).send({
+    from: account,
+    gas: 1500000,
+    gasPrice: '30000000000',
+}).then((newContractInstance) => {
+    console.log(newContractInstance.options.address);
+});
