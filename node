@@ -1,0 +1,9 @@
+const Web3 = require('web3');
+const web3 = new Web3('http://localhost:8545'); // Replace with your Ethereum node URL
+
+web3.eth.getAccounts().then((accounts) => {
+    console.log('Connected to Ethereum node successfully');
+    console.log('Accounts available on the node:', accounts);
+}).catch((error) => {
+    console.error('Error connecting to Ethereum node:', error);
+});
