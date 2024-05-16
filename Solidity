@@ -1,11 +1,23 @@
 #Solidity
-// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+contract Blockchain {
+    struct Block {
+        uint index;
+        string data;
+        uint timestamp;
+        bytes32 previousHash;
+        bytes32 currentHash;
+    }
 
-contract MyToken is ERC20 {
-    constructor() ERC20("MyToken", "MTK") {
-        _mint(msg.sender, 1000000 * 10 ** uint(decimals()));
+    mapping(uint => Block) public blockchain;
+    uint public chainLength;
+
+    function addBlock(string memory _data) public {
+        bytes32 _previousHash = chainLength == 0 ? bytes32(0) : blockchain[chainLength].currentHash;
+        bytes32 _currentHash = keccak256(abi.encodePacked(chainLength, _data, block.timestamp, _previousHash));
+        
+        blockchain[chainLength + 1] = Block(chainLength + 1, _data, block.timestamp, _previousHash, _currentHash);
+        chainLength++;
     }
 }
