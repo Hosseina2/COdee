@@ -1,0 +1,13 @@
+#معادله درجه سوم
+import numpy as np
+
+# داده‌های ورودی
+x = np.array([1, 2, 3, 4, 5])
+y = np.array([10, 30, 60, 100, 150])
+
+# بدست آوردن معادله درجه 3
+coefficients = np.polyfit(x, y, 3)
+equation = np.poly1d(coefficients)
+
+# چاپ معادله
+print("معادله: ", equation)
