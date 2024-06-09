@@ -1,0 +1,122 @@
+#game
+
+import pygame
+import sys
+import random
+
+# تنظیمات
+width, height = 800, 600
+background_color = (0, 0, 0)
+paddle_color = (255, 255, 255)
+ball_color = (255, 255, 255)
+paddle_width, paddle_height = 10, 100
+ball_size = 20
+ball_speed = [7, 7]
+
+# تعریف امتیازات
+left_score = 0
+right_score = 0
+winning_score = 21  # تعیین امتیاز برنده شدن
+
+# تابلوهای راکت و توپ
+left_paddle = pygame.Rect(50, height // 2 - paddle_height // 2, paddle_width, paddle_height)
+right_paddle = pygame.Rect(width - 50 - paddle_width, height // 2 - paddle_height // 2, paddle_width, paddle_height)
+ball = pygame.Rect(width // 2 - ball_size // 2, height // 2 - ball_size // 2, ball_size, ball_size)
+
+# شروع Pygame
+pygame.init()
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Pong Game")
+
+clock = pygame.time.Clock()
+
+# حرکت راکت ها
+paddle_speed = 10
+
+def move_paddles():
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_w] and left_paddle.top > 0:
+        left_paddle.y -= paddle_speed
+    if keys[pygame.K_s] and left_paddle.bottom < height:
+        left_paddle.y += paddle_speed
+    if keys[pygame.K_UP] and right_paddle.top > 0:
+        right_paddle.y -= paddle_speed
+    if keys[pygame.K_DOWN] and right_paddle.bottom < height:
+        right_paddle.y += paddle_speed
+
+# حرکت توپ
+def move_ball():
+    global left_score, right_score
+
+    ball.x += ball_speed[0]
+    ball.y += ball_speed[1]
+
+    # برخورد توپ با راکت چپ
+    if ball.colliderect(left_paddle):
+        ball_speed[0] = abs(ball_speed[0])
+
+    # برخورد توپ با راکت راست
+    if ball.colliderect(right_paddle):
+        ball_speed[0] = -abs(ball_speed[0])
+
+    # برخورد توپ با دیوار بالا یا پایین
+    if ball.top <= 0 or ball.bottom >= height:
+        ball_speed[1] = -ball_speed[1]
+
+    # توپ از یک طرف صفحه عبور کرده
+    if ball.left <= 0:
+        right_score += 1
+        reset_ball()
+    elif ball.right >= width:
+        left_score += 1
+        reset_ball()
+
+def reset_ball():
+    global ball_speed
+    ball.center = (width // 2, height // 2)
+    ball_speed = [random.choice((7, -7)), random.choice((7, -7))]
+
+# تنظیمات
+# ...
+paddle_color_left = (255, 0, 0)  # رنگ راکت چپ
+paddle_color_right = (0, 0, 255)  # رنگ راکت راست
+# ...
+
+# اجرای بازی
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    move_paddles()
+    move_ball()
+
+    # بررسی برنده شدن
+    if left_score >= winning_score or right_score >= winning_score:
+        if left_score > right_score:
+            print("بازیکن چپ برنده شد!")
+        else:
+            print("بازیکن راست برنده شد!")
+        pygame.quit()
+        sys.exit()
+
+    # پاک کردن صفحه
+    screen.fill(background_color)
+
+    # رسم راکت ها و توپ با رنگ‌های مختلف
+    pygame.draw.rect(screen, paddle_color_left, left_paddle)
+    pygame.draw.rect(screen, paddle_color_right, right_paddle)
+    pygame.draw.ellipse(screen, ball_color, ball)
+
+    # نمایش امتیازات
+    font = pygame.font.Font(None, 36)
+    left_score_text  = font.render(f"Player 1: {left_score}", True, (255, 255, 255))
+    right_score_text = font.render(f"Player 2: {right_score}", True, (255, 255, 255))
+    screen.blit(left_score_text, (20, 20))
+    screen.blit(right_score_text, (width - 200, 20))
+
+    pygame.display.flip()
+    clock.tick(60)
+
+pygame.quit()
