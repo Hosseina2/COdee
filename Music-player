@@ -1,0 +1,19 @@
+#Phyton
+Pip install pygame
+import pygame
+import tkinter as tkr
+from tkinter.filedialog import askdirectory
+import os
+    pygame.init()
+    pygame.mixer.init()
+    def play():
+        pygame.mixer.music.load(play_list.get(tkr.ACTIVE))
+        var.set(play_list.get(tkr.ACTIVE))
+        pygame.mixer.music.play()
+    def stop():
+        pygame.mixer.music.stop()
+    def pause():
+        pygame.mixer.music.pause()
+    def unpause():
+        pygame.mixer.music.unpause()
+#3
