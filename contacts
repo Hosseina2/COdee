@@ -1,0 +1,29 @@
+#phyton
+contacts = {}
+
+def add_contact(name, phone_number):
+    contacts[name] = phone_number
+    print(f"Contact {name} added with phone number {phone_number}")
+
+def search_contact(name):
+    if name in contacts:
+        print(f"{name}: {contacts[name]}")
+    else:
+        print(f"Contact {name} not found")
+
+def delete_contact(name):
+    if name in contacts:
+        del contacts[name]
+        print(f"Contact {name} deleted")
+    else:
+        print(f"Contact {name} not found")
+
+# مثال استفاده از توابع
+add_contact("Alice", "1234567890")
+add_contact("Bob", "9876543210")
+
+search_contact("Alice")
+search_contact("Charlie")
+
+delete_contact("Bob")
+delete_contact("David")
