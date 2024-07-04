@@ -1,0 +1,39 @@
+import random
+
+# تعریف متغیرها
+WIDTH = 20
+HEIGHT = 10
+snake = [(0, 0)]
+direction = (1, 0)
+food = (random.randint(0, WIDTH-1), random.randint(0, HEIGHT-1))
+
+# حرکت مار
+def move_snake():
+    global snake, direction
+    head = snake[-1]
+    new_head = (head[0] + direction[0], head[1] + direction[1])
+    if new_head in snake or new_head[0] < 0 or new_head[0] >= WIDTH or new_head[1] < 0 or new_head[1] >= HEIGHT:
+        print("Game Over!")
+        exit()
+    snake.append(new_head)
+    if new_head == food:
+        food = (random.randint(0, WIDTH-1), random.randint(0, HEIGHT-1))
+    else:
+        snake.pop(0)
+
+# نمایش صفحه بازی
+def display_game():
+    for y in range(HEIGHT):
+        for x in range(WIDTH):
+            if (x, y) in snake:
+                print("*", end="")
+            elif (x, y) == food:
+                print("#", end="")
+            else:
+                print(".", end="")
+        print()
+
+# حلقه اصلی بازی
+while True:
+    display_game()
+    move_snake()
